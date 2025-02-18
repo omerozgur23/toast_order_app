@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "924839516684",
+    "project_id": "toast-order-app",
+    "storage_bucket": "toast-order-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924839516684:android:1341feeb6bca08692cec29",
+        "android_client_info": {
+          "package_name": "com.example.toast_order_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2tsr9MIjWaqTXoaXh4DNdCFPDPZdxv58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
