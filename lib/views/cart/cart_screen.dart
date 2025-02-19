@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:toast_order_app/bloc/cart/cart_bloc.dart';
 import 'package:toast_order_app/bloc/cart/cart_event.dart';
@@ -9,10 +8,7 @@ import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/cart_item.dart';
-import 'package:toast_order_app/models/product.dart';
 import 'package:toast_order_app/utilities/general_utils.dart';
-import 'package:toast_order_app/views/starter/widgets/app_bar/app_bar_widget.dart';
-import 'package:toast_order_app/views/starter/widgets/bottom/bottom_sheet_widget.dart';
 
 class CartScreen extends StatelessWidget {
   final generalUtils = getIt<IGeneralUtils>();
@@ -110,6 +106,7 @@ class CartScreen extends StatelessWidget {
               ),
             ],
           ),
+          Text(item.remainingIngredients.join(", ")),
           SizedBox(height: context.dynamicHeight(0.02)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

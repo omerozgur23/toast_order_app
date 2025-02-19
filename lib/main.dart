@@ -8,6 +8,7 @@ import 'package:toast_order_app/bloc/navigatin_bar/bottom_navigation_bloc.dart';
 import 'package:toast_order_app/bloc/order_type_button/order_type_bloc.dart';
 import 'package:toast_order_app/bloc/product/product_bloc.dart';
 import 'package:toast_order_app/bloc/product/product_event.dart';
+import 'package:toast_order_app/bloc/product_detail/ingredient_bloc.dart';
 import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/firebase_options.dart';
 import 'package:toast_order_app/repository/category_repository.dart';
@@ -39,6 +40,9 @@ void main() async {
     ),
     BlocProvider(
       create: (context) => CartBloc(),
+    ),
+    BlocProvider(
+      create: (context) => IngredientBloc(),
     )
   ], child: const MyApp()));
 }

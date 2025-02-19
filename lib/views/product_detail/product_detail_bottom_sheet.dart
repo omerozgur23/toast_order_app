@@ -6,6 +6,7 @@ import 'package:toast_order_app/bloc/cart/cart_event.dart';
 import 'package:toast_order_app/bloc/product/product_bloc.dart';
 import 'package:toast_order_app/bloc/product/product_event.dart';
 import 'package:toast_order_app/bloc/product_detail/ingredient_bloc.dart';
+import 'package:toast_order_app/bloc/product_detail/ingredient_state.dart';
 import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/product.dart';
@@ -25,24 +26,45 @@ class ProductDetailBottomSheet extends StatefulWidget {
 
 class _ProductDetailBottomSheetState extends State<ProductDetailBottomSheet> {
   int _quantity = 1;
+  late IngredientBloc ingredientBloc;
+  final TextEditingController noteController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    ingredientBloc = IngredientBloc();
+  }
+
+  @override
+  void dispose() {
+    ingredientBloc.close();
+    noteController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final generalUtils = GeneralUtils();
-    return DraggableScrollableSheet(
-        initialChildSize: 0.95,
-        maxChildSize: 0.95,
-        builder: (_, scrollController) {
-          return Scaffold(
-              // resizeToAvoidBottomInset: true,
-              backgroundColor: HexColor(white),
-              appBar: _buildProductDetailAppBar(context, generalUtils),
-              body: Column(children: [
-                Expanded(
-                    child:
-                        _buildProductDetailContent(context, scrollController)),
-                _buildBottomBar(context)
-              ]));
-        });
+    return BlocProvider.value(
+      value: ingredientBloc,
+      child: Builder(
+        builder: (context) => DraggableScrollableSheet(
+            initialChildSize: 0.95,
+            maxChildSize: 0.95,
+            builder: (_, scrollController) {
+              return Scaffold(
+                  // resizeToAvoidBottomInset: true,
+                  backgroundColor: HexColor(white),
+                  appBar: _buildProductDetailAppBar(context, generalUtils),
+                  body: Column(children: [
+                    Expanded(
+                        child: _buildProductDetailContent(
+                            context, scrollController)),
+                    _buildBottomBar(context)
+                  ]));
+            }),
+      ),
+    );
   }
 
   AppBar _buildProductDetailAppBar(
@@ -79,8 +101,7 @@ class _ProductDetailBottomSheetState extends State<ProductDetailBottomSheet> {
               child: Column(children: [
                 _buildProductCountButton(context),
                 _buildContentSubtitle(context, "Standart Malzemeler"),
-                _buildIngredientButtons(context,
-                    ["Sucuk", "Kaşar", "Domates", "Jalepeno", "Tereyağı"]),
+                _buildIngredientButtons(context),
                 _buildContentSubtitle(context, "Ürün Notu"),
                 CustomerNoteInput(controller: noteController)
               ]),
@@ -147,42 +168,40 @@ class _ProductDetailBottomSheetState extends State<ProductDetailBottomSheet> {
   }
 
   Widget _buildAddToCartButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => _onAddToCartPressed(context),
-      style: ElevatedButton.styleFrom(
-          backgroundColor: HexColor(green),
-          padding: EdgeInsets.symmetric(
-              horizontal: context.dynamicWidth(0.1),
-              vertical: context.dynamicHeight(0.015)),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-      child: Text("Sepete Ekle",
-          style: TextStyle(
-              fontSize: context.dynamicHeight(0.015), color: HexColor(white))),
+    return BlocBuilder<IngredientBloc, IngredientState>(
+      builder: (context, state) {
+        return ElevatedButton(
+          onPressed: () =>
+              _onAddToCartPressed(context, state.markedIngredients),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: HexColor(green),
+              padding: EdgeInsets.symmetric(
+                  horizontal: context.dynamicWidth(0.1),
+                  vertical: context.dynamicHeight(0.015)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20))),
+          child: Text("Sepete Ekle",
+              style: TextStyle(
+                  fontSize: context.dynamicHeight(0.015),
+                  color: HexColor(white))),
+        );
+      },
     );
   }
 
-  void _onAddToCartPressed(BuildContext context) {
-    final selectedIngredients = ["malzemeler"];
+  void _onAddToCartPressed(
+      BuildContext context, List<String> markedIngredients) {
+    final markedIngredients =
+        context.read<IngredientBloc>().state.markedIngredients;
+    final allIngredients = widget.product.toastIngredients;
     final note = "not";
-
-    // final cartItems = context.read<CartBloc>().state.items;
-
-    // final existingCartItem = cartItems.firstWhere(
-    //   (item) => item.product.id == widget.product.id,
-    //   // orElse: () => null,
-    // );
-
-    // if (existingCartItem != null) {
-    //   context.read<CartBloc>().add(UpdateQuantityEvent(0, existingCartItem.quantity + 1));
-    // } else {
-
-    // }
+    print("onAddToCartMethod $markedIngredients");
     context.read<CartBloc>().add(AddToCartEvent(
         product: widget.product,
         quantity: _quantity,
-        selectedIngredients: selectedIngredients,
-        note: note));
+        allIngredients: allIngredients,
+        markedIngredients: markedIngredients,
+        note: noteController.text));
 
     Navigator.pop(context);
   }
@@ -245,21 +264,22 @@ class _ProductDetailBottomSheetState extends State<ProductDetailBottomSheet> {
     );
   }
 
-  Widget _buildIngredientButtons(
-      BuildContext context, List<String> ingredients) {
-    return Padding(
-      padding: EdgeInsets.only(top: context.dynamicHeight(0.02)),
-      child: Wrap(
-          spacing:
-              context.dynamicWidth(0.02), // Butonlar arasındaki yatay boşluk
-          // runSpacing: context.dynamicHeight(0.001), // Satırlar arasındaki boşluk
-          children: ingredients.map((ingredient) {
-            return BlocProvider(
-              create: (_) => IngredientBloc(),
-              child: IngredientButton(
-                  ingredientName: ingredient, ingredientId: ingredient),
-            );
-          }).toList()),
+  Widget _buildIngredientButtons(BuildContext context) {
+    return BlocBuilder<IngredientBloc, IngredientState>(
+      builder: (context, state) {
+        return Padding(
+          padding: EdgeInsets.only(top: context.dynamicHeight(0.02)),
+          child: Wrap(
+              spacing: context
+                  .dynamicWidth(0.02), // Butonlar arasındaki yatay boşluk
+              // runSpacing: context.dynamicHeight(0.001), // Satırlar arasındaki boşluk
+              children: widget.product.toastIngredients.map((ingredient) {
+                final isMarked = state.markedIngredients.contains(ingredient);
+                return IngredientButton(
+                    ingredient: ingredient, isMarked: isMarked);
+              }).toList()),
+        );
+      },
     );
   }
 }

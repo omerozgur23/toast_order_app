@@ -17,6 +17,10 @@ class ProductRepository {
             description: (data["description"] is List)
                 ? List<String>.from(data["description"])
                 : [],
+            toastIngredients: (data["toast_ingredients"] != null &&
+                    data["toast_ingredients"] is List)
+                ? List<String>.from(data["toast_ingredients"])
+                : [],
             price: (data["price"] is int)
                 ? (data["price"] as int).toDouble()
                 : data["price"] as double,
@@ -55,6 +59,10 @@ class ProductRepository {
             name: data["name"],
             description: (data["description"] is List)
                 ? List<String>.from(data["description"])
+                : [],
+            toastIngredients: (data["toast_ingredients"] != null &&
+                    data["toast_ingredients"] is List)
+                ? List<String>.from(data["toast_ingredients"])
                 : [],
             price: (data["price"] is int)
                 ? (data["price"] as int).toDouble()
