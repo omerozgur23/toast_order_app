@@ -5,7 +5,7 @@ import 'package:toast_order_app/bloc/product/product_bloc.dart';
 import 'package:toast_order_app/bloc/product/product_event.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/category.dart';
-import 'package:toast_order_app/views/home/widgets/category/category_item.dart';
+import 'package:toast_order_app/widget/category/category_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryList extends StatelessWidget {

@@ -4,7 +4,7 @@ import 'package:toast_order_app/bloc/category/category_bloc.dart';
 import 'package:toast_order_app/bloc/category/category_state.dart';
 import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/utilities/general_utils.dart';
-import 'package:toast_order_app/views/home/widgets/category/category_list.dart';
+import 'package:toast_order_app/widget/category/category_list.dart';
 
 class CategoryScreen extends StatelessWidget {
   final generalUtils = getIt<IGeneralUtils>();

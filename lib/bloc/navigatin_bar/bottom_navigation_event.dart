@@ -14,3 +14,13 @@ class TabChangedEvent extends BottomNavigationEvent {
 }
 
 class LoginEvent extends BottomNavigationEvent {}
+
+class UpdateCartCountEvent extends BottomNavigationEvent {
+  final int count;
+  UpdateCartCountEvent(this.count);
+
+  @override
+  List<Object> get props => [count];
+}
+
+class ChangeToOrderConfirmationScreen extends BottomNavigationEvent {}

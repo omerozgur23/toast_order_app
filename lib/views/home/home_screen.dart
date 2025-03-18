@@ -4,11 +4,11 @@ import 'package:toast_order_app/bloc/category/category_event.dart';
 import 'package:toast_order_app/bloc/category/category_state.dart';
 import 'package:toast_order_app/bloc/product/product_bloc.dart';
 import 'package:toast_order_app/bloc/product/product_event.dart';
-import 'package:toast_order_app/views/home/widgets/carousel/carousel_slider_widget.dart';
+import 'package:toast_order_app/widget/carousel/carousel_slider_widget.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
-import 'package:toast_order_app/views/home/widgets/category/category_screen.dart';
+import 'package:toast_order_app/widget/category/category_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toast_order_app/views/home/widgets/product/product_screen.dart';
+import 'package:toast_order_app/widget/product/product_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

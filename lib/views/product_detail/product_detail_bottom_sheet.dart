@@ -11,8 +11,8 @@ import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/product.dart';
 import 'package:toast_order_app/utilities/general_utils.dart';
-import 'package:toast_order_app/views/product_detail/customer_note_input.dart';
-import 'package:toast_order_app/views/product_detail/ingredient_button.dart';
+import 'package:toast_order_app/widget/product_detail_sheet/customer_note_input.dart';
+import 'package:toast_order_app/widget/product_detail_sheet/ingredient_button.dart';
 
 class ProductDetailBottomSheet extends StatefulWidget {
   final Product product;

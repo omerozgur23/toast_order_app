@@ -7,7 +7,7 @@ import 'package:toast_order_app/bloc/order_type_button/order_type_state.dart';
 import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:toast_order_app/views/starter/widgets/bottom/bottom_sheet_widget.dart';
+import 'package:toast_order_app/widget/order_type_sheet/order_type_sheet_widget.dart';
 
 class OrderTypeButtonWidget extends StatelessWidget {
   const OrderTypeButtonWidget({super.key});
@@ -23,7 +23,7 @@ class OrderTypeButtonWidget extends StatelessWidget {
 
       return ElevatedButton(
         onPressed: () {
-          BottomSheetWidget.showOrderTypeBottomSheet(context);
+          OrderTypeSheetWidget.showOrderTypeBottomSheet(context);
         },
         style: ElevatedButton.styleFrom(
             minimumSize:

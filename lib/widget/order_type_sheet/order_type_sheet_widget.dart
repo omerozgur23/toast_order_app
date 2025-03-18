@@ -6,7 +6,7 @@ import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class BottomSheetWidget {
+class OrderTypeSheetWidget {
   static void showOrderTypeBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -45,6 +45,12 @@ class BottomSheetWidget {
                   height: context.dynamicHeight(0.02),
                 ),
                 _buildCustomButton(
+                  onTap: () {
+                    context
+                        .read<OrderTypeBloc>()
+                        .add(SelectedOrderTypeEvent("Adrese Tesim"));
+                    Navigator.pop(context);
+                  },
                   context: context,
                   text: "Adrese Teslim",
                   description: "Siparişini adresine getirelim.",
@@ -54,6 +60,12 @@ class BottomSheetWidget {
                   height: context.dynamicHeight(0.01),
                 ),
                 _buildCustomButton(
+                  onTap: () {
+                    context
+                        .read<OrderTypeBloc>()
+                        .add(SelectedOrderTypeEvent("Beklemeden Gel Al"));
+                    Navigator.pop(context);
+                  },
                   context: context,
                   text: "Beklemeden Gel Al",
                   description: "Sıra beklemeden şubeden teslim al.",
@@ -74,12 +86,14 @@ class BottomSheetWidget {
       {required BuildContext context,
       required String text,
       required String description,
-      required Color color}) {
+      required Color color,
+      required VoidCallback onTap}) {
     return ElevatedButton(
-      onPressed: () {
-        context.read<OrderTypeBloc>().add(SelectedOrderTypeEvent(text));
-        Navigator.pop(context);
-      },
+      // onPressed: () {
+      //   context.read<OrderTypeBloc>().add(SelectedOrderTypeEvent(text));
+      //   Navigator.pop(context);
+      // },
+      onPressed: onTap,
       style: ElevatedButton.styleFrom(
           backgroundColor: color,
           minimumSize: Size(double.infinity, context.dynamicHeight(0.11)),

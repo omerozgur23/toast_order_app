@@ -20,9 +20,11 @@ class BodyContentWidget extends StatelessWidget {
       return const OfferScreen();
     } else if (state is AccountScreenState) {
       return const AccountScreen();
-    } else if (state is LoginScreenState) {
-      return const LoginScreen();
-    } else {
+    }
+    // else if (state is LoginScreenState) {
+    //   return const LoginScreen();
+    // }
+    else {
       return const Center(child: Text("Beklenmeyen bir hata oluştu!"));
     }
   }

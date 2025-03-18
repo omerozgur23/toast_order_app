@@ -1,10 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast_order_app/bloc/cart/cart_event.dart';
 import 'package:toast_order_app/bloc/cart/cart_state.dart';
+import 'package:toast_order_app/bloc/navigatin_bar/bottom_navigation_bloc.dart';
+import 'package:toast_order_app/bloc/navigatin_bar/bottom_navigation_event.dart';
 import 'package:toast_order_app/models/cart_item.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  CartBloc() : super(const CartState()) {
+  final BottomNavigationBloc navigationBloc;
+
+  CartBloc({required this.navigationBloc}) : super(CartInitial()) {
     on<AddToCartEvent>(_onAddToCart);
     on<RemoveFromCartEvent>(_onRemoveFromCart);
     on<UpdateQuantityEvent>(_onUpdateQuantity);
@@ -46,13 +50,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
 
     // Güncellenmiş sepet durumunu yayınla
-    emit(CartState(items: updatedItems));
+    emit(CartLoaded(items: updatedItems));
+
+    navigationBloc
+        .add(UpdateCartCountEvent(_calculateTotalCartCount(updatedItems)));
   }
 
   void _onRemoveFromCart(RemoveFromCartEvent event, Emitter<CartState> emit) {
     final updatedItems = [...state.items];
     updatedItems.removeAt(event.index);
-    emit(CartState(items: updatedItems));
+    emit(CartLoaded(items: updatedItems));
+    navigationBloc
+        .add(UpdateCartCountEvent(_calculateTotalCartCount(updatedItems)));
   }
 
   void _onUpdateQuantity(UpdateQuantityEvent event, Emitter<CartState> emit) {
@@ -66,7 +75,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           markedIngredients: currentItem.markedIngredients,
           note: updatedItems[event.index].note);
       updatedItems[event.index] = updatedItem;
-      emit(CartState(items: updatedItems));
+      emit(CartLoaded(items: updatedItems));
+      navigationBloc
+          .add(UpdateCartCountEvent(_calculateTotalCartCount(updatedItems)));
     }
+  }
+
+  int _calculateTotalCartCount(List<CartItem> items) {
+    return items.fold(0, (total, item) => total + item.quantity);
   }
 }

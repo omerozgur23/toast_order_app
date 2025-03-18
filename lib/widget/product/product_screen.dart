@@ -5,7 +5,7 @@ import 'package:toast_order_app/bloc/product/product_state.dart';
 import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/utilities/exception/error_handler.dart';
 import 'package:toast_order_app/utilities/general_utils.dart';
-import 'package:toast_order_app/views/home/widgets/product/product_list.dart';
+import 'package:toast_order_app/widget/product/product_list.dart';
 
 class ProductScreen extends StatelessWidget {
   final generalUtils = getIt<IGeneralUtils>();

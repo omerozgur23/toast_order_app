@@ -4,11 +4,14 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:toast_order_app/bloc/cart/cart_bloc.dart';
 import 'package:toast_order_app/bloc/cart/cart_event.dart';
 import 'package:toast_order_app/bloc/cart/cart_state.dart';
+import 'package:toast_order_app/bloc/navigatin_bar/bottom_navigation_bloc.dart';
+import 'package:toast_order_app/bloc/navigatin_bar/bottom_navigation_event.dart';
 import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/constants/color.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/cart_item.dart';
 import 'package:toast_order_app/utilities/general_utils.dart';
+import 'package:toast_order_app/views/cart/order_confirmation_screen.dart';
 
 class CartScreen extends StatelessWidget {
   final generalUtils = getIt<IGeneralUtils>();
@@ -21,7 +24,7 @@ class CartScreen extends StatelessWidget {
         if (state.items.isEmpty) {
           return const Center(
             child: Text(
-              "Sepetinizde ürün bulunmuyor",
+              "Sepetinde ürün bulunmuyor",
               style: TextStyle(fontSize: 18),
             ),
           );
@@ -155,7 +158,15 @@ class CartScreen extends StatelessWidget {
         children: [
           Text("${totalAmount.toStringAsFixed(2)} TL"),
           ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context
+                    .read<BottomNavigationBloc>()
+                    .add(ChangeToOrderConfirmationScreen());
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OrderConfirmationScreen()));
+              },
               child: Text(
                 "Ödeme Yap",
                 style: TextStyle(color: HexColor(black)),

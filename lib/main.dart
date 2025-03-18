@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:toast_order_app/bloc/carousel/carousel_bloc.dart';
 import 'package:toast_order_app/bloc/cart/cart_bloc.dart';
@@ -13,8 +14,10 @@ import 'package:toast_order_app/config/injection.dart';
 import 'package:toast_order_app/firebase_options.dart';
 import 'package:toast_order_app/repository/category_repository.dart';
 import 'package:toast_order_app/repository/product_repository.dart';
+import 'package:toast_order_app/views/login/login_screen.dart';
 import 'package:toast_order_app/views/starter/starter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +25,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Sadece dikeyde çalışmasını sağlar
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
       create: (context) => CarouselBloc(),
@@ -39,7 +47,8 @@ void main() async {
       create: (context) => OrderTypeBloc(),
     ),
     BlocProvider(
-      create: (context) => CartBloc(),
+      create: (context) =>
+          CartBloc(navigationBloc: context.read<BottomNavigationBloc>()),
     ),
     BlocProvider(
       create: (context) => IngredientBloc(),
@@ -58,7 +67,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const Starter(),
+      home: _getInitialScreen(),
     );
+  }
+
+  Widget _getInitialScreen() {
+    final User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      return const Starter(); // Eğer kullanıcı giriş yaptıysa StarterScreen'e git
+    } else {
+      return const LoginScreen(); // Eğer giriş yapmadıysa LoginScreen'e git
+    }
   }
 }

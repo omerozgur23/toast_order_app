@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:toast_order_app/extensions/context_extension.dart';
 import 'package:toast_order_app/models/product.dart';
-import 'package:toast_order_app/views/home/widgets/product/product_item.dart';
+import 'package:toast_order_app/widget/product/product_item.dart';
 
 class ProductList extends StatelessWidget {
   final List<Product> products;
